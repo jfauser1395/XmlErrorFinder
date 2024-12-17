@@ -3,27 +3,36 @@ using XmlErrorFinder.Utilities;
 
 try
 {
-    // First make sure the XMLFile is in the project's root directory and throw exception if it's missing
+    // Ensure the XMLFiles directory exists and throw an exception if it's missing
     string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "XMLFiles");
     if (!Directory.Exists(fullPath))
     {
-        throw new DirectoryNotFoundException($"The directory '{fullPath}' does not exist.");
+        throw new DirectoryNotFoundException($"The directory: '{fullPath}' does not exist.");
     }
 
-    // Safe all xml files into the xmlFilePath string and throw exception if XMLFiles directory is empty
+    // Save all XML files into the xmlFilePaths string array and throw an exception if the XMLFiles folder is empty
     string[] xmlFilePaths = Directory.GetFiles(fullPath);
     if (xmlFilePaths.Length == 0)
     {
-        throw new InvalidOperationException(
-            "No files found in the XMLFiles directory. Include a valid xml file into the XMLFiles Folder"
+        throw new FileNotFoundException(
+            "No files found in the XMLFiles directory. Include a valid XML file in the XMLFiles folder."
         );
     }
 
-    // Make sure the xml file extension is being used
-    var fileExtension = Path.GetExtension(xmlFilePaths[0]).ToLower();
-    if (fileExtension != ".xml")
+    // Declare file name and extension then check the extension validity
+    string fileExtension = Path.GetExtension(xmlFilePaths[0]).ToLower();
+    string fileName = Path.GetFileName(xmlFilePaths[0]);
+    if (string.IsNullOrEmpty(fileExtension))
     {
-        throw new InvalidDataException("Incorrect file extension. Please provide an XML file.");
+        throw new InvalidDataException(
+            $"File: '{fileName}' has no file extension. Please provide a valid XML file."
+        );
+    }
+    else if (fileExtension != ".xml")
+    {
+        throw new InvalidDataException(
+            $"File: '{fileName}' has an incorrect file extension: '{fileExtension}'. Please provide a valid XML file."
+        );
     }
 
     //// XmlHandler class instantiation
@@ -36,19 +45,15 @@ try
 }
 catch (DirectoryNotFoundException ex)
 {
-    Console.WriteLine($"Error: {ex.Message}");
+    Console.WriteLine($"Error: '{ex.Message}'");
 }
-catch (InvalidOperationException ex)
+catch (FileNotFoundException ex)
 {
-    Console.WriteLine($"Error: {ex.Message}");
+    Console.WriteLine($"Error: '{ex.Message}'");
 }
 catch (InvalidDataException ex)
 {
     Console.WriteLine($"Error: {ex.Message}");
-}
-catch (FileNotFoundException ex)
-{
-    Console.WriteLine($"This file was not found: '{ex.Message}'");
 }
 catch (IOException ex)
 {
