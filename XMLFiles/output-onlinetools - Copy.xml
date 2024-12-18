@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <PurchaseOrders>
-	<PurchaseOrder PurchaseOrderNumber="" OrderDate="1999-10-20">
+	<PurchaseOrder PurchaseOrderNumber=" OrderDate="1999-10-20">
 		<Address Type="Shipping">
 			<Name>Ellen Adams</Name>
 			<Street  OrderDate="">123 Maple Street</Street>
